@@ -1,17 +1,10 @@
 import { getAllPosts } from '@/lib/posts'
 import Calendar from '@/components/Calendar'
-import Link from 'next/link'
-
-function formatDateVi(dateStr: string) {
-  if (!dateStr) return ''
-  const d = new Date(dateStr + 'T00:00:00')
-  return d.toLocaleDateString('vi-VN', { day: 'numeric', month: 'long', year: 'numeric' })
-}
+import PostList from '@/components/PostList'
 
 export default function Home() {
   const posts = getAllPosts()
 
-  // Build date -> slug map (first post per date)
   const postsByDate: Record<string, string> = {}
   for (const p of posts) {
     if (p.date && !postsByDate[p.date]) {
@@ -19,72 +12,52 @@ export default function Home() {
     }
   }
 
-  const recent = posts.slice(0, 10)
-
   return (
-    <div className="max-w-4xl mx-auto px-6 py-12">
-      <div className="mb-12">
-        <h1 className="font-serif text-4xl font-semibold text-stone-900 mb-3">Vườn Kiến Thức</h1>
-        <p className="text-stone-500 text-lg">Những ghi chép, suy nghĩ, và bài học từ cuộc sống.</p>
+    <div className="max-w-5xl mx-auto px-4 sm:px-6 py-8 sm:py-12">
+      {/* Hero */}
+      <div className="mb-8 sm:mb-10">
+        <div className="inline-flex items-center gap-2 bg-white/70 border border-sky-200 rounded-full px-4 py-1.5 mb-4 text-sky-600 text-sm font-medium shadow-sm">
+          <span>📚</span> Kho lưu trữ kiến thức gia đình
+        </div>
+        <h1 className="text-2xl sm:text-3xl font-bold text-sky-900 mb-2">
+          Chào mừng đến <span className="text-sky-500">Gia Đình 222</span>
+        </h1>
+        <p className="text-sky-600 text-base">
+          Những ghi chép, suy nghĩ, và bài học quý giá từ cuộc sống.
+        </p>
       </div>
 
-      <div className="grid grid-cols-1 lg:grid-cols-3 gap-10">
-        {/* Recent Posts */}
-        <div className="lg:col-span-2">
-          <h2 className="text-xs font-semibold uppercase tracking-widest text-stone-400 mb-6">
-            Bài viết gần đây
-          </h2>
+      {/* 3-column grid: posts | calendar | list-view */}
+      <div className="grid grid-cols-1 lg:grid-cols-12 gap-6">
 
-          {recent.length === 0 ? (
-            <p className="text-stone-400 text-sm">Chưa có bài viết nào.</p>
-          ) : (
-            <div className="space-y-0">
-              {recent.map((post, i) => (
-                <Link key={post.slug} href={`/post/${post.slug}`} className="group block">
-                  <article className={`py-5 ${i < recent.length - 1 ? 'border-b border-stone-100' : ''}`}>
-                    <div className="flex items-start gap-4">
-                      {/* Date pill */}
-                      <div className="shrink-0 text-right pt-0.5">
-                        <span className="text-xs text-stone-400 font-mono whitespace-nowrap">
-                          {post.date}
-                        </span>
-                      </div>
-                      {/* Content */}
-                      <div className="flex-1 min-w-0">
-                        <h3 className="font-serif text-stone-900 font-semibold text-base leading-snug group-hover:text-stone-600 transition-colors mb-1 line-clamp-2">
-                          {post.title}
-                        </h3>
-                        {post.description && (
-                          <p className="text-stone-500 text-sm line-clamp-2 leading-relaxed">
-                            {post.description}
-                          </p>
-                        )}
-                      </div>
-                      {/* Arrow */}
-                      <span className="shrink-0 text-stone-300 group-hover:text-stone-500 transition-colors text-lg pt-0.5">
-                        →
-                      </span>
-                    </div>
-                  </article>
-                </Link>
-              ))}
-            </div>
-          )}
+        {/* ── Main: Bài viết ── */}
+        <div className="lg:col-span-7 card p-5 sm:p-6">
+          <div className="section-label">📝 Danh sách bài viết</div>
+          <PostList posts={posts} />
         </div>
 
-        {/* Sidebar: Calendar */}
-        <div className="lg:col-span-1">
-          <h2 className="text-xs font-semibold uppercase tracking-widest text-stone-400 mb-6">
-            Lịch
-          </h2>
-          <Calendar postsByDate={postsByDate} />
+        {/* ── Right sidebar ── */}
+        <div className="lg:col-span-5 space-y-5">
+
+          {/* Calendar */}
+          <div className="card p-5">
+            <div className="section-label">📅 Lịch bài viết</div>
+            <Calendar postsByDate={postsByDate} />
+          </div>
 
           {/* Stats */}
-          <div className="mt-6 bg-white border border-stone-200 rounded-2xl p-5 shadow-sm">
-            <div className="text-center">
-              <span className="block text-3xl font-serif font-semibold text-stone-800">{posts.length}</span>
-              <span className="text-xs text-stone-400 mt-1 block">bài viết đã đăng</span>
-            </div>
+          <div className="stat-badge">
+            <div className="text-3xl font-bold mb-1">{posts.length}</div>
+            <div className="text-sky-100 text-sm">bài viết đã đăng</div>
+          </div>
+
+          {/* Quick info */}
+          <div className="card p-5">
+            <div className="section-label">💡 Về trang này</div>
+            <p className="text-sky-700 text-sm leading-relaxed">
+              Đây là không gian lưu giữ kiến thức, ký ức và những bài học của gia đình.
+              Mỗi bài viết là một viên gạch xây dựng kho tàng chung.
+            </p>
           </div>
         </div>
       </div>

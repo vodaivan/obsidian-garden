@@ -16,7 +16,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const post = await getPostBySlug(params.slug)
   if (!post) return {}
   return {
-    title: `${post.title} — Vườn Kiến Thức`,
+    title: `${post.title} — Gia Đình 222`,
     description: post.description,
   }
 }
@@ -32,48 +32,45 @@ export default async function PostPage({ params }: Props) {
     : ''
 
   return (
-    <div className="max-w-2xl mx-auto px-6 py-12">
+    <div className="max-w-2xl mx-auto px-4 sm:px-6 py-8 sm:py-12">
       {/* Back */}
-      <Link
-        href="/"
-        className="inline-flex items-center gap-1.5 text-stone-400 hover:text-stone-600 text-sm mb-10 transition-colors"
-      >
-        ← Quay lại
+      <Link href="/" className="back-btn mb-8 inline-flex">
+        ← Trang chủ
       </Link>
 
-      {/* Article header */}
-      <header className="mb-10">
-        <h1 className="font-serif text-3xl font-semibold text-stone-900 leading-tight mb-3">
-          {post.title}
-        </h1>
-        {formattedDate && (
-          <time className="text-stone-400 text-sm">{formattedDate}</time>
-        )}
-        {post.description && (
-          <p className="mt-3 text-stone-500 text-base leading-relaxed border-l-2 border-stone-200 pl-4">
-            {post.description}
-          </p>
-        )}
-      </header>
+      {/* Article card */}
+      <div className="card p-6 sm:p-8 mt-4">
+        <header className="mb-6">
+          <h1 className="text-2xl sm:text-3xl font-bold text-sky-900 leading-tight mb-3">
+            {post.title}
+          </h1>
+          {formattedDate && (
+            <time className="inline-flex items-center gap-1.5 text-sky-500 text-sm font-medium bg-sky-50 px-3 py-1 rounded-full border border-sky-100">
+              📅 {formattedDate}
+            </time>
+          )}
+          {post.description && (
+            <p className="mt-4 text-sky-700 text-base leading-relaxed border-l-3 border-sky-300 pl-4 bg-sky-50 rounded-r-lg py-2 pr-3">
+              {post.description}
+            </p>
+          )}
+        </header>
 
-      <hr className="border-stone-200 mb-10" />
+        <hr className="border-sky-100 mb-6" />
 
-      {/* Content — no properties shown */}
-      <div
-        className="prose"
-        dangerouslySetInnerHTML={{ __html: post.contentHtml || '' }}
-      />
+        {/* Content — no properties shown */}
+        <div
+          className="prose"
+          dangerouslySetInnerHTML={{ __html: post.contentHtml || '' }}
+        />
 
-      <hr className="border-stone-200 mt-16 mb-8" />
+        <hr className="border-sky-100 mt-12 mb-6" />
 
-      {/* Footer nav */}
-      <div className="flex justify-center">
-        <Link
-          href="/"
-          className="text-stone-400 hover:text-stone-600 text-sm transition-colors"
-        >
-          ← Xem tất cả bài viết
-        </Link>
+        <div className="flex justify-center">
+          <Link href="/" className="back-btn">
+            ← Xem tất cả bài viết
+          </Link>
+        </div>
       </div>
     </div>
   )
