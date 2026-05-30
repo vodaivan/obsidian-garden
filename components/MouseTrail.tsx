@@ -65,11 +65,15 @@ export default function MouseTrail() {
 
     function onMove(e: MouseEvent) {
       const now = Date.now()
-      if (now - last < 35) return
+      if (now - last < 18) return  // tăng tần suất
       last = now
-      spawn(e.clientX + (Math.random()-0.5)*6, e.clientY + OFFSET_Y)
-      if (Math.random() > 0.5) {
-        spawn(e.clientX + (Math.random()-0.5)*10, e.clientY + OFFSET_Y + Math.random()*8)
+      // spawn 4-5 hạt mỗi lần di chuột
+      const count = 4 + Math.floor(Math.random() * 2)
+      for (let i = 0; i < count; i++) {
+        spawn(
+          e.clientX + (Math.random() - 0.5) * 16,
+          e.clientY + OFFSET_Y + Math.random() * 12
+        )
       }
     }
 
