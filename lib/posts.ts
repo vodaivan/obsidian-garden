@@ -13,7 +13,21 @@ export interface Post {
   date: string
   description: string
   cover: string
+  topic: string
   contentHtml?: string
+}
+
+/** status có thể là string 'online'/'published' hoặc array ['Online'] */
+function isOnline(status: unknown): boolean {
+  if (!status) return false
+  if (typeof status === 'string') {
+    return status.toLowerCase() === 'online' || status.toLowerCase() === 'published'
+  }
+  if (Array.isArray(status)) {
+    return status.some(s => typeof s === 'string' &&
+      (s.toLowerCase() === 'online' || s.toLowerCase() === 'published'))
+  }
+  return false
 }
 
 function slugify(filename: string): string {
@@ -37,8 +51,7 @@ export function getAllPosts(): Post[] {
       const fileContents = fs.readFileSync(filePath, 'utf8')
       const { data } = matter(fileContents)
 
-      // Only show notes with status: published
-      if (data.status !== 'published') return null
+      if (!isOnline(data.status)) return null
 
       return {
         slug: slugify(filename),
@@ -46,6 +59,7 @@ export function getAllPosts(): Post[] {
         date: data.date ? new Date(data.date).toISOString().split('T')[0] : '',
         description: data.description || '',
         cover: data.cover || '',
+        topic: data.topic || '',
         _filename: filename,
       }
     })
@@ -69,7 +83,7 @@ export async function getPostBySlug(slug: string): Promise<Post | null> {
     const fileContents = fs.readFileSync(filePath, 'utf8')
     const { data, content } = matter(fileContents)
 
-    if (data.status !== 'published') return null
+    if (!isOnline(data.status)) return null
 
     const processed = await remark()
       .use(remarkGfm)
@@ -82,6 +96,7 @@ export async function getPostBySlug(slug: string): Promise<Post | null> {
       date: data.date ? new Date(data.date).toISOString().split('T')[0] : '',
       description: data.description || '',
       cover: data.cover || '',
+      topic: data.topic || '',
       contentHtml: processed.toString(),
     }
   }

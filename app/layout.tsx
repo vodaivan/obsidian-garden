@@ -33,9 +33,6 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
           </div>
         </header>
         <main>{children}</main>
-        <footer className="site-footer">
-          Gia Đình 222 · Viết bằng tình yêu và sự tò mò 💙
-        </footer>
       </body>
     </html>
   )

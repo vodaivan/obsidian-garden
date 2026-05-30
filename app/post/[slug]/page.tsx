@@ -32,31 +32,38 @@ export default async function PostPage({ params }: Props) {
     : ''
 
   return (
-    <div className="max-w-2xl mx-auto px-4 sm:px-6 py-8 sm:py-12">
+    <div className="max-w-3xl mx-auto px-4 sm:px-6 py-8">
       {/* Back */}
-      <Link href="/" className="back-btn mb-8 inline-flex">
+      <Link href="/" className="back-btn mb-6 inline-flex">
         ← Trang chủ
       </Link>
 
-      {/* Article card */}
-      <div className="card p-6 sm:p-8 mt-4">
+      {/* Article card — wider max-w-3xl */}
+      <div className="card p-6 sm:p-10 mt-3">
         <header className="mb-6">
-          <h1 className="text-2xl sm:text-3xl font-bold text-sky-900 leading-tight mb-3">
+          <h1 className="text-2xl sm:text-3xl font-bold text-slate-900 leading-tight mb-3">
             {post.title}
           </h1>
-          {formattedDate && (
-            <time className="inline-flex items-center gap-1.5 text-sky-500 text-sm font-medium bg-sky-50 px-3 py-1 rounded-full border border-sky-100">
-              📅 {formattedDate}
-            </time>
-          )}
+          <div className="flex flex-wrap items-center gap-2">
+            {formattedDate && (
+              <time className="inline-flex items-center gap-1.5 text-slate-500 text-sm bg-slate-50 px-3 py-1 rounded-full border border-slate-200">
+                📅 {formattedDate}
+              </time>
+            )}
+            {post.topic && (
+              <span className="inline-flex items-center gap-1.5 text-blue-600 text-sm bg-blue-50 px-3 py-1 rounded-full border border-blue-100">
+                🏷️ {post.topic}
+              </span>
+            )}
+          </div>
           {post.description && (
-            <p className="mt-4 text-sky-700 text-base leading-relaxed border-l-3 border-sky-300 pl-4 bg-sky-50 rounded-r-lg py-2 pr-3">
+            <p className="mt-4 text-slate-600 text-base leading-relaxed border-l-4 border-blue-300 pl-4 bg-slate-50 rounded-r-lg py-2.5 pr-4">
               {post.description}
             </p>
           )}
         </header>
 
-        <hr className="border-sky-100 mb-6" />
+        <hr className="border-slate-100 mb-8" />
 
         {/* Content — no properties shown */}
         <div
@@ -64,7 +71,7 @@ export default async function PostPage({ params }: Props) {
           dangerouslySetInnerHTML={{ __html: post.contentHtml || '' }}
         />
 
-        <hr className="border-sky-100 mt-12 mb-6" />
+        <hr className="border-slate-100 mt-12 mb-6" />
 
         <div className="flex justify-center">
           <Link href="/" className="back-btn">
