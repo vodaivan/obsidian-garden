@@ -4,7 +4,7 @@ import { useState } from 'react'
 import Calendar from './Calendar'
 import PostList from './PostList'
 import TopicSidebar from './TopicSidebar'
-import BluePetals from './BluePetals'
+import CherryBlossom from './BluePetals'
 
 interface Post { slug: string; title: string; date: string; description: string; topic: string; firstImage: string }
 
@@ -26,7 +26,7 @@ export default function HomePage({ posts, postsByDate }: Props) {
     <div className="max-w-6xl mx-auto px-3 sm:px-5 py-6 sm:py-8">
       {/* Hero banner với hoa anh đào */}
       <div className="hero-banner mb-6">
-        <BluePetals />
+        <CherryBlossom />
         <div className="relative z-10">
           <h1 className="text-2xl sm:text-3xl font-bold text-slate-900 mb-1">
             Chào mừng đến <span className="text-pink-600">Gia Đình 222</span> 🏠
