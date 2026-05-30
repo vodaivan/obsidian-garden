@@ -61,13 +61,16 @@ export default function MouseTrail() {
       }, 580)
     }
 
+    const OFFSET_Y = 22  // bong bóng xuất hiện bên dưới con trỏ, không che chữ
+
     function onMove(e: MouseEvent) {
       const now = Date.now()
       if (now - last < 35) return
       last = now
-      spawn(e.clientX, e.clientY)
-      // occasionally add a second sparkle slightly offset
-      if (Math.random() > 0.5) spawn(e.clientX + (Math.random()-0.5)*8, e.clientY + (Math.random()-0.5)*8)
+      spawn(e.clientX + (Math.random()-0.5)*6, e.clientY + OFFSET_Y)
+      if (Math.random() > 0.5) {
+        spawn(e.clientX + (Math.random()-0.5)*10, e.clientY + OFFSET_Y + Math.random()*8)
+      }
     }
 
     window.addEventListener('mousemove', onMove)

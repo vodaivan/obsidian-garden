@@ -16,20 +16,27 @@ function drawPetal(c: CanvasRenderingContext2D, p: Petal) {
   c.globalAlpha = p.opacity
   c.translate(p.x, p.y)
   c.rotate(p.rotation)
-  c.fillStyle = p.color
-  // simple 5-petal flower
-  for (let i = 0; i < 5; i++) {
-    c.save()
-    c.rotate((i * Math.PI * 2) / 5)
-    c.beginPath()
-    c.ellipse(0, -p.size * 0.65, p.size * 0.32, p.size * 0.65, 0, 0, Math.PI * 2)
-    c.fill()
-    c.restore()
-  }
-  c.fillStyle = '#fff9'
+
+  // Cánh hoa anh đào: hình bầu dục tròn, rộng hơn dài — giống cánh hoa thật
+  const gradient = c.createRadialGradient(0, 0, 0, 0, 0, p.size)
+  gradient.addColorStop(0, '#fff0f6')
+  gradient.addColorStop(0.5, p.color)
+  gradient.addColorStop(1, p.color + 'aa')
+  c.fillStyle = gradient
+
   c.beginPath()
-  c.arc(0, 0, p.size * 0.18, 0, Math.PI * 2)
+  // Hình oval ngang: rộng > cao, bo tròn như cánh hoa anh đào
+  c.ellipse(0, 0, p.size * 1.1, p.size * 0.7, 0, 0, Math.PI * 2)
   c.fill()
+
+  // Đường gân nhẹ giữa cánh
+  c.strokeStyle = p.color + '66'
+  c.lineWidth = 0.5
+  c.beginPath()
+  c.moveTo(-p.size * 0.8, 0)
+  c.lineTo(p.size * 0.8, 0)
+  c.stroke()
+
   c.restore()
 }
 
