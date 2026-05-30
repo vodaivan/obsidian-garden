@@ -4,6 +4,7 @@ import { useState } from 'react'
 import Calendar from './Calendar'
 import PostList from './PostList'
 import TopicSidebar from './TopicSidebar'
+import CherryBlossom from './CherryBlossom'
 
 interface Post { slug: string; title: string; date: string; description: string; topic: string; firstImage: string }
 
@@ -23,12 +24,15 @@ export default function HomePage({ posts, postsByDate }: Props) {
 
   return (
     <div className="max-w-6xl mx-auto px-3 sm:px-5 py-6 sm:py-8">
-      {/* Hero */}
-      <div className="mb-6">
-        <h1 className="text-xl sm:text-2xl font-bold text-slate-900 mb-1">
-          Chào mừng đến <span className="text-blue-600">Gia Đình 222</span>
-        </h1>
-        <p className="text-slate-500 text-sm">Những ghi chép, suy nghĩ, và bài học quý giá từ cuộc sống.</p>
+      {/* Hero banner với hoa anh đào */}
+      <div className="hero-banner mb-6">
+        <CherryBlossom />
+        <div className="relative z-10">
+          <h1 className="text-2xl sm:text-3xl font-bold text-slate-900 mb-1">
+            Chào mừng đến <span className="text-pink-600">Gia Đình 222</span> 🏠
+          </h1>
+          <p className="text-slate-500 text-sm">Những ghi chép, suy nghĩ, và bài học quý giá từ cuộc sống.</p>
+        </div>
       </div>
 
       {/*

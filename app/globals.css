@@ -84,12 +84,12 @@ body {
 .post-item:hover .post-title { color: var(--accent); }
 
 .post-date-badge {
-  flex-shrink: 0; font-size: 0.7rem;
+  flex-shrink: 0; font-size: 0.8rem;
   font-family: 'Consolas', monospace; color: var(--text-muted);
-  padding-top: 0.15rem; white-space: nowrap;
+  padding-top: 0.2rem; white-space: nowrap; font-weight: 500;
 }
 .post-title {
-  font-size: 0.9375rem; font-weight: 600; color: var(--text);
+  font-size: 1.0625rem; font-weight: 700; color: var(--text);
   line-height: 1.4; transition: color 0.12s;
 }
 .post-desc {
@@ -238,6 +238,26 @@ body {
   box-shadow: 0 1px 3px rgba(0,0,0,0.06);
 }
 .back-btn:hover { background: #f8fafc; border-color: #94a3b8; color: var(--text); }
+
+/* ── CHERRY BLOSSOM ── */
+.hero-banner {
+  position: relative; overflow: hidden;
+  background: linear-gradient(135deg, #fdf2f8 0%, #fce7f3 40%, #ede9fe 100%);
+  border-radius: 16px; padding: 1.75rem 2rem; margin-bottom: 1.5rem;
+  border: 1px solid #fbcfe8;
+}
+.petal {
+  position: absolute; top: -40px;
+  font-size: 1.1rem; opacity: 0.75;
+  pointer-events: none; user-select: none;
+  animation: petalFall linear infinite;
+  will-change: transform;
+}
+@keyframes petalFall {
+  0%   { transform: translateY(0) rotate(0deg) translateX(0); opacity: 0.8; }
+  50%  { transform: translateY(50%) rotate(180deg) translateX(20px); opacity: 0.6; }
+  100% { transform: translateY(120%) rotate(360deg) translateX(-10px); opacity: 0; }
+}
 
 /* ── MOBILE ── */
 @media (max-width: 1024px) {

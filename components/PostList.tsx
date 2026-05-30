@@ -70,7 +70,7 @@ export default function PostList({ posts, filterTopic = '' }: Props) {
               </div>
               {/* Thumbnail nếu bài có ảnh */}
               {post.firstImage ? (
-                <div className="shrink-0 w-14 h-14 rounded-lg overflow-hidden border border-slate-100 shadow-sm ml-1">
+                <div className="shrink-0 w-20 h-20 rounded-xl overflow-hidden border border-slate-200 shadow-md ml-2">
                   <img
                     src={post.firstImage}
                     alt={post.title}
