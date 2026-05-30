@@ -3,7 +3,7 @@
 import { useState } from 'react'
 import Link from 'next/link'
 
-interface Post { slug: string; title: string; date: string; description: string; topic: string }
+interface Post { slug: string; title: string; date: string; description: string; topic: string; firstImage: string }
 interface Props {
   postsByDate: Record<string, string>   // date → slug
   allPosts: Post[]

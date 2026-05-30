@@ -3,7 +3,7 @@
 import { useState, useMemo } from 'react'
 import Link from 'next/link'
 
-interface Post { slug: string; title: string; date: string; description: string; topic: string }
+interface Post { slug: string; title: string; date: string; description: string; topic: string; firstImage: string }
 type SortMode = 'recent' | 'newest' | 'az' | 'za'
 
 const SORT_OPTIONS: { key: SortMode; label: string; icon: string }[] = [
@@ -68,7 +68,19 @@ export default function PostList({ posts, filterTopic = '' }: Props) {
                 <div className="post-title">{post.title}</div>
                 {post.description && <div className="post-desc">{post.description}</div>}
               </div>
-              <span className="post-arrow">→</span>
+              {/* Thumbnail nếu bài có ảnh */}
+              {post.firstImage ? (
+                <div className="shrink-0 w-14 h-14 rounded-lg overflow-hidden border border-slate-100 shadow-sm ml-1">
+                  <img
+                    src={post.firstImage}
+                    alt={post.title}
+                    className="w-full h-full object-cover"
+                    loading="lazy"
+                  />
+                </div>
+              ) : (
+                <span className="post-arrow">→</span>
+              )}
             </Link>
           ))}
         </div>

@@ -14,6 +14,7 @@ export interface Post {
   description: string
   cover: string
   topic: string
+  firstImage: string   // URL ảnh đầu tiên trong bài, dùng cho thumbnail
   contentHtml?: string
 }
 
@@ -56,13 +57,25 @@ function processWikilinks(content: string): string {
     )
 }
 
-/** Trích xuất ~120 ký tự đầu tiên từ nội dung markdown (bỏ heading/bullet/ký tự đặc biệt) */
+/** Trích xuất ~120 ký tự đầu tiên từ nội dung markdown (bỏ ảnh, heading, bullet...) */
 function extractExcerpt(content: string): string {
   return content
     .split('\n')
-    .map(l => l.replace(/^#+\s+/, '').replace(/^[-*>]\s+/, '').replace(/\*\*|__|`/g, '').trim())
-    .find(l => l.length > 20) // lấy dòng đầu tiên có nội dung thực
+    .map(l => l
+      .replace(/!\[.*?\]\(.*?\)/g, '')   // bỏ ảnh markdown
+      .replace(/^#+\s+/, '')              // bỏ heading
+      .replace(/^[-*>]\s+/, '')           // bỏ bullet/blockquote
+      .replace(/\*\*|__|`/g, '')          // bỏ bold/code
+      .trim()
+    )
+    .find(l => l.length > 20)
     ?.slice(0, 120) ?? ''
+}
+
+/** Lấy URL ảnh đầu tiên trong nội dung đã xử lý wikilinks */
+function extractFirstImage(processedContent: string): string {
+  const m = processedContent.match(/!\[.*?\]\(([^)]+)\)/)
+  return m ? m[1] : ''
 }
 
 /** Đọc date từ date_created hoặc date, trả về YYYY-MM-DD */
@@ -117,14 +130,16 @@ export function getAllPosts(): Post[] {
 
       if (!isOnline(data.status)) return null
 
+      const processed = processWikilinks(content)
       const description = data.description || ''
       return {
         slug: slugify(filename),
         title: data.title || filename.replace(/\.md$/, ''),
         date: parseDate(data.date_created ?? data.date),
-        description: description || extractExcerpt(processWikilinks(content)),
+        description: description || extractExcerpt(processed),
         cover: data.cover || '',
         topic: data.topic || '',
+        firstImage: extractFirstImage(processed),
         _filename: filename,
       }
     })
@@ -155,6 +170,7 @@ export async function getPostBySlug(slug: string): Promise<Post | null> {
       .use(remarkHtml, { sanitize: false })
       .process(processWikilinks(content))
 
+    const html = processed.toString()
     return {
       slug,
       title: data.title || filename.replace(/\.md$/, ''),
@@ -162,7 +178,8 @@ export async function getPostBySlug(slug: string): Promise<Post | null> {
       description: data.description || '',
       cover: data.cover || '',
       topic: data.topic || '',
-      contentHtml: processed.toString(),
+      firstImage: extractFirstImage(processWikilinks(content)),
+      contentHtml: html,
     }
   }
 

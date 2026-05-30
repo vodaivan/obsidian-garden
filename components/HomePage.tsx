@@ -5,7 +5,7 @@ import Calendar from './Calendar'
 import PostList from './PostList'
 import TopicSidebar from './TopicSidebar'
 
-interface Post { slug: string; title: string; date: string; description: string; topic: string }
+interface Post { slug: string; title: string; date: string; description: string; topic: string; firstImage: string }
 
 interface Props {
   posts: Post[]
