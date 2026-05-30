@@ -30,6 +30,16 @@ function isOnline(status: unknown): boolean {
   return false
 }
 
+/** Đọc date từ date_created hoặc date, trả về YYYY-MM-DD */
+function parseDate(raw: unknown): string {
+  if (!raw) return ''
+  try {
+    const d = new Date(String(raw))
+    if (isNaN(d.getTime())) return ''
+    return d.toISOString().split('T')[0]
+  } catch { return '' }
+}
+
 function slugify(filename: string): string {
   return filename
     .replace(/\.md$/, '')
@@ -56,7 +66,7 @@ export function getAllPosts(): Post[] {
       return {
         slug: slugify(filename),
         title: data.title || filename.replace(/\.md$/, ''),
-        date: data.date ? new Date(data.date).toISOString().split('T')[0] : '',
+        date: parseDate(data.date_created ?? data.date),
         description: data.description || '',
         cover: data.cover || '',
         topic: data.topic || '',

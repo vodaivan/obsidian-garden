@@ -3,34 +3,44 @@ chcp 65001 >nul
 title Dang bai len Gia Dinh 222
 
 echo.
-echo  ====================================
-echo   Gia Dinh 222 - Dang bai len web
-echo  ====================================
+echo  ================================================
+echo   Gia Dinh 222 - Tu dong dang bai len web
+echo  ================================================
 echo.
 
-cd /d "B:\OneDrive - Chonnam National University\3 Resources\Obsidian\Family Knowledge System\my-garden"
+set GARDEN=B:\OneDrive - Chonnam National University\3 Resources\Obsidian\Family Knowledge System\my-garden
+set PUBLISH=B:\OneDrive - Chonnam National University\3 Resources\Obsidian\Family Knowledge System\_Publish
 
-echo [1/3] Kiem tra thay doi...
+cd /d "%GARDEN%"
+
+echo [1/4] Dong bo bai viet tu _Publish vao content...
+for %%f in ("%PUBLISH%\*.md") do (
+    echo   + Copy: %%~nxf
+    copy /Y "%%f" "%GARDEN%\content\" >nul
+)
+echo   Hoan thanh dong bo.
+echo.
+
+echo [2/4] Kiem tra thay doi...
 git status --short
 echo.
 
 git add .
 
-set /p msg="Tieu de commit (Enter de dung ten mac dinh): "
-if "%msg%"=="" set msg=Cap nhat bai viet moi
+set /p msg="Ten commit (Enter de dung ten mac dinh): "
+if "%msg%"=="" set msg=Cap nhat bai viet
 
 echo.
-echo [2/3] Dang luu: %msg%
+echo [3/4] Luu thay doi: %msg%
 git commit -m "%msg%"
 
 echo.
-echo [3/3] Dang day len GitHub...
+echo [4/4] Day len GitHub...
 git push
 
 echo.
-echo  ====================================
-echo   Hoan thanh! Web se cap nhat sau ~1 phut.
-echo   Link: https://obsidian-garden.vercel.app
-echo  ====================================
+echo  ================================================
+echo   Hoan thanh! Web se cap nhat sau khoang 1 phut.
+echo  ================================================
 echo.
 pause
