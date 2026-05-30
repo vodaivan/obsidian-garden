@@ -1,5 +1,7 @@
 import type { Metadata } from 'next'
 import './globals.css'
+import MouseTrail from '@/components/MouseTrail'
+import GrassFooter from '@/components/GrassFooter'
 
 export const metadata: Metadata = {
   title: 'Gia Đình 222',
@@ -32,7 +34,9 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
             <span className="tagline hidden sm:block">Kiến thức · Ký ức · Yêu thương</span>
           </div>
         </header>
+        <MouseTrail />
         <main>{children}</main>
+        <GrassFooter />
       </body>
     </html>
   )
