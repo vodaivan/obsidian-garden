@@ -126,7 +126,11 @@ export default function Calendar({ postsByDate, allPosts }: Props) {
           {/* Today button */}
           {isCurrentMonth && (
             <div className="mt-3 flex justify-center">
-              <button className="today-btn" onClick={() => setSelectedDate(null)}>
+              <button className="today-btn" onClick={() => {
+                const t = today
+                const key = `${t.getFullYear()}-${String(t.getMonth()+1).padStart(2,'0')}-${String(t.getDate()).padStart(2,'0')}`
+                setSelectedDate(key)
+              }}>
                 📍 Hôm nay
               </button>
             </div>

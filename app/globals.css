@@ -139,8 +139,8 @@ body {
 .calendar-day.sunday { color: #ef4444; }
 .calendar-day.sunday.other-month { color: #fca5a5; }
 .calendar-day.sunday.has-post { color: white; }
-.calendar-day.selected-day { background: #0f172a; color: white; border-radius: 8px; }
-.calendar-day.selected-day.has-post { background: #0f172a; }
+.calendar-day.selected-day { background: #f97316; color: white; border-radius: 8px; font-weight: 700; }
+.calendar-day.selected-day.has-post { background: #ea580c; }
 
 .today-btn {
   font-size: 0.68rem; font-weight: 600; color: var(--accent);
