@@ -39,8 +39,9 @@ export default function BluePetals() {
   useEffect(() => {
     const canvas = canvasRef.current
     if (!canvas) return
-    const c = canvas.getContext('2d')
-    if (!c) return
+    const maybeCtx = canvas.getContext('2d')
+    if (!maybeCtx) return
+    const c: CanvasRenderingContext2D = maybeCtx
 
     let w = canvas.offsetWidth
     let h = canvas.offsetHeight
