@@ -30,6 +30,32 @@ function isOnline(status: unknown): boolean {
   return false
 }
 
+const IMAGE_EXTS = /\.(png|jpg|jpeg|webp|gif|svg|avif)$/i
+
+/**
+ * Chuyển Obsidian wikilink sang markdown chuẩn:
+ *   ![[image.webp]]        → ![image](/images/image.webp)
+ *   ![[image.webp|caption]] → ![caption](/images/image.webp)
+ *   ![[note]]              → (xoá — link nội bộ không dùng được trên web)
+ */
+function processWikilinks(content: string): string {
+  return content
+    // Image wikilinks
+    .replace(/!\[\[([^\]|]+?)(?:\|([^\]]*))?\]\]/g, (_, file, alt) => {
+      const name = file.trim()
+      if (IMAGE_EXTS.test(name)) {
+        const label = (alt || name).trim()
+        const encoded = encodeURIComponent(name)
+        return `![${label}](/images/${encoded})`
+      }
+      return '' // xoá wikilink không phải ảnh
+    })
+    // Non-image wikilinks [[note]] or [[note|alias]] → just alias/name text
+    .replace(/\[\[([^\]|]+?)(?:\|([^\]]*))?\]\]/g, (_, note, alias) =>
+      alias ? alias.trim() : note.trim()
+    )
+}
+
 /** Trích xuất ~120 ký tự đầu tiên từ nội dung markdown (bỏ heading/bullet/ký tự đặc biệt) */
 function extractExcerpt(content: string): string {
   return content
@@ -96,7 +122,7 @@ export function getAllPosts(): Post[] {
         slug: slugify(filename),
         title: data.title || filename.replace(/\.md$/, ''),
         date: parseDate(data.date_created ?? data.date),
-        description: description || extractExcerpt(content),
+        description: description || extractExcerpt(processWikilinks(content)),
         cover: data.cover || '',
         topic: data.topic || '',
         _filename: filename,
@@ -127,7 +153,7 @@ export async function getPostBySlug(slug: string): Promise<Post | null> {
     const processed = await remark()
       .use(remarkGfm)
       .use(remarkHtml, { sanitize: false })
-      .process(content)
+      .process(processWikilinks(content))
 
     return {
       slug,
