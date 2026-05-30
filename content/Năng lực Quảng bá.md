@@ -9,7 +9,7 @@ people:
 type:
 topic: Wealth Building
 status:
-  - Online
+  - online
 rating:
   - ⭐⭐
 description: '"Năng lực Quảng bá" được mệnh danh là "Pháp bảo của cuộc sống", là chiếc chìa khóa vạn năng để mở ra mọi cánh cửa và biến mọi ước mơ thành hiện thực.'

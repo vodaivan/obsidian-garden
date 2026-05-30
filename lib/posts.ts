@@ -30,6 +30,15 @@ function isOnline(status: unknown): boolean {
   return false
 }
 
+/** Trích xuất ~120 ký tự đầu tiên từ nội dung markdown (bỏ heading/bullet/ký tự đặc biệt) */
+function extractExcerpt(content: string): string {
+  return content
+    .split('\n')
+    .map(l => l.replace(/^#+\s+/, '').replace(/^[-*>]\s+/, '').replace(/\*\*|__|`/g, '').trim())
+    .find(l => l.length > 20) // lấy dòng đầu tiên có nội dung thực
+    ?.slice(0, 120) ?? ''
+}
+
 /** Đọc date từ date_created hoặc date, trả về YYYY-MM-DD */
 function parseDate(raw: unknown): string {
   if (!raw) return ''
@@ -40,11 +49,30 @@ function parseDate(raw: unknown): string {
   } catch { return '' }
 }
 
+/** Chuyển tiếng Việt có dấu → ASCII để dùng làm URL slug */
+function removeVietnamese(str: string): string {
+  return str
+    .replace(/[àáạảãâầấậẩẫăằắặẳẵ]/g, 'a')
+    .replace(/[èéẹẻẽêềếệểễ]/g, 'e')
+    .replace(/[ìíịỉĩ]/g, 'i')
+    .replace(/[òóọỏõôồốộổỗơờớợởỡ]/g, 'o')
+    .replace(/[ùúụủũưừứựửữ]/g, 'u')
+    .replace(/[ỳýỵỷỹ]/g, 'y')
+    .replace(/đ/g, 'd')
+    .replace(/[ÀÁẠẢÃÂẦẤẬẨẪĂẰẮẶẲẴ]/g, 'a')
+    .replace(/[ÈÉẸẺẼÊỀẾỆỂỄ]/g, 'e')
+    .replace(/[ÌÍỊỈĨ]/g, 'i')
+    .replace(/[ÒÓỌỎÕÔỒỐỘỔỖƠỜỚỢỞỠ]/g, 'o')
+    .replace(/[ÙÚỤỦŨƯỪỨỰỬỮ]/g, 'u')
+    .replace(/[ỲÝỴỶỸ]/g, 'y')
+    .replace(/Đ/g, 'd')
+}
+
 function slugify(filename: string): string {
-  return filename
+  return removeVietnamese(filename)
     .replace(/\.md$/, '')
     .toLowerCase()
-    .replace(/[^a-z0-9À-ɏḀ-ỿ\s-]/g, '')
+    .replace(/[^a-z0-9\s-]/g, '')
     .replace(/\s+/g, '-')
     .replace(/-+/g, '-')
     .trim()
@@ -59,15 +87,16 @@ export function getAllPosts(): Post[] {
     .map(filename => {
       const filePath = path.join(contentDir, filename)
       const fileContents = fs.readFileSync(filePath, 'utf8')
-      const { data } = matter(fileContents)
+      const { data, content } = matter(fileContents)
 
       if (!isOnline(data.status)) return null
 
+      const description = data.description || ''
       return {
         slug: slugify(filename),
         title: data.title || filename.replace(/\.md$/, ''),
         date: parseDate(data.date_created ?? data.date),
-        description: data.description || '',
+        description: description || extractExcerpt(content),
         cover: data.cover || '',
         topic: data.topic || '',
         _filename: filename,
@@ -103,7 +132,7 @@ export async function getPostBySlug(slug: string): Promise<Post | null> {
     return {
       slug,
       title: data.title || filename.replace(/\.md$/, ''),
-      date: data.date ? new Date(data.date).toISOString().split('T')[0] : '',
+      date: parseDate(data.date_created ?? data.date),
       description: data.description || '',
       cover: data.cover || '',
       topic: data.topic || '',

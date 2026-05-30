@@ -5,6 +5,8 @@ import { useState } from 'react'
 interface Props {
   activeTopic: string
   onSelect: (topic: string) => void
+  postCounts: Record<string, number>   // topic key → số bài
+  totalPosts: number
 }
 
 const TOPICS = [
@@ -22,7 +24,7 @@ const TOPICS = [
 
 const PASSWORD = '789'
 
-export default function TopicSidebar({ activeTopic, onSelect }: Props) {
+export default function TopicSidebar({ activeTopic, onSelect, postCounts, totalPosts }: Props) {
   const [collapsed, setCollapsed]   = useState(false)
   const [unlocked, setUnlocked]     = useState(false)
   const [pw, setPw]                 = useState('')
@@ -85,21 +87,30 @@ export default function TopicSidebar({ activeTopic, onSelect }: Props) {
                 onClick={() => onSelect('')}
               >
                 <span>📋</span>
-                <span>Tất cả bài viết</span>
+                <span className="flex-1 text-left">Tất cả bài viết</span>
+                <span className="ml-auto text-xs font-bold opacity-70 bg-white/60 rounded-full px-1.5 py-0.5">{totalPosts}</span>
               </button>
 
               <div className="border-t border-slate-100 my-2" />
 
-              {TOPICS.map(t => (
-                <button
-                  key={t.key}
-                  className={`topic-tag w-full text-left ${t.color} ${activeTopic === t.key ? 'active' : ''}`}
-                  onClick={() => onSelect(activeTopic === t.key ? '' : t.key)}
-                >
-                  <span>{t.icon}</span>
-                  <span>{t.key}</span>
-                </button>
-              ))}
+              {TOPICS.map(t => {
+                const count = postCounts[t.key] ?? 0
+                return (
+                  <button
+                    key={t.key}
+                    className={`topic-tag w-full text-left ${t.color} ${activeTopic === t.key ? 'active' : ''}`}
+                    onClick={() => onSelect(activeTopic === t.key ? '' : t.key)}
+                  >
+                    <span>{t.icon}</span>
+                    <span className="flex-1">{t.key}</span>
+                    {count > 0 && (
+                      <span className="ml-auto text-xs font-bold opacity-70 bg-white/60 rounded-full px-1.5 py-0.5 min-w-[1.25rem] text-center">
+                        {count}
+                      </span>
+                    )}
+                  </button>
+                )
+              })}
 
               <div className="border-t border-slate-100 pt-2 mt-1">
                 <button

@@ -15,6 +15,12 @@ interface Props {
 export default function HomePage({ posts, postsByDate }: Props) {
   const [activeTopic, setActiveTopic] = useState('')
 
+  // Đếm số bài theo topic
+  const postCounts: Record<string, number> = {}
+  for (const p of posts) {
+    if (p.topic) postCounts[p.topic] = (postCounts[p.topic] ?? 0) + 1
+  }
+
   return (
     <div className="max-w-6xl mx-auto px-3 sm:px-5 py-6 sm:py-8">
       {/* Hero */}
@@ -45,7 +51,7 @@ export default function HomePage({ posts, postsByDate }: Props) {
 
         {/* RIGHT: Topics */}
         <div className="lg:w-56 xl:w-60 shrink-0">
-          <TopicSidebar activeTopic={activeTopic} onSelect={setActiveTopic} />
+          <TopicSidebar activeTopic={activeTopic} onSelect={setActiveTopic} postCounts={postCounts} totalPosts={posts.length} />
 
           {/* Stats card */}
           <div className="card p-4 mt-3 text-center">
