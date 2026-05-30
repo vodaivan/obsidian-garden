@@ -42,12 +42,12 @@ export default function PostList({ posts, filterTopic = '' }: Props) {
   const paginated  = sorted.slice((page - 1) * PAGE_SIZE, page * PAGE_SIZE)
 
   // Page numbers to show: always first, last, current ±1
-  function pageNumbers() {
-    const nums = new Set<number>()
-    nums.add(1)
-    nums.add(totalPages)
-    for (let i = Math.max(1, page - 1); i <= Math.min(totalPages, page + 1); i++) nums.add(i)
-    return [...nums].sort((a, b) => a - b)
+  function pageNumbers(): number[] {
+    const set: Record<number, true> = {}
+    set[1] = true
+    set[totalPages] = true
+    for (let i = Math.max(1, page - 1); i <= Math.min(totalPages, page + 1); i++) set[i] = true
+    return Object.keys(set).map(Number).sort((a, b) => a - b)
   }
 
   return (
