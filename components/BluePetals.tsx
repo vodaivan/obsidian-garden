@@ -11,14 +11,36 @@ interface Petal {
 
 const BLUES = ['#38bdf8','#0ea5e9','#7dd3fc','#bae6fd','#0284c7','#60a5fa']
 
+function drawFlower(c: CanvasRenderingContext2D, p: Petal) {
+  c.save()
+  c.globalAlpha = p.opacity
+  c.translate(p.x, p.y)
+  c.rotate(p.rotation)
+  c.fillStyle = p.color
+  for (let i = 0; i < 5; i++) {
+    c.save()
+    c.rotate((i * Math.PI * 2) / 5)
+    c.beginPath()
+    c.ellipse(0, -p.size * 0.65, p.size * 0.35, p.size * 0.65, 0, 0, Math.PI * 2)
+    c.fill()
+    c.restore()
+  }
+  c.fillStyle = '#fff'
+  c.globalAlpha = p.opacity * 0.8
+  c.beginPath()
+  c.arc(0, 0, p.size * 0.2, 0, Math.PI * 2)
+  c.fill()
+  c.restore()
+}
+
 export default function BluePetals() {
   const canvasRef = useRef<HTMLCanvasElement>(null)
 
   useEffect(() => {
     const canvas = canvasRef.current
     if (!canvas) return
-    const ctx = canvas.getContext('2d')
-    if (!ctx) return
+    const c = canvas.getContext('2d')
+    if (!c) return
 
     let w = canvas.offsetWidth
     let h = canvas.offsetHeight
@@ -41,33 +63,6 @@ export default function BluePetals() {
       }
     }
 
-    // Draw a 5-petal flower
-    function drawFlower(ctx: CanvasRenderingContext2D, p: Petal) {
-      ctx.save()
-      ctx.globalAlpha = p.opacity
-      ctx.translate(p.x, p.y)
-      ctx.rotate(p.rotation)
-      ctx.fillStyle = p.color
-
-      for (let i = 0; i < 5; i++) {
-        ctx.save()
-        ctx.rotate((i * Math.PI * 2) / 5)
-        ctx.beginPath()
-        ctx.ellipse(0, -p.size * 0.65, p.size * 0.35, p.size * 0.65, 0, 0, Math.PI * 2)
-        ctx.fill()
-        ctx.restore()
-      }
-      // center dot
-      ctx.fillStyle = '#fff'
-      ctx.globalAlpha = p.opacity * 0.8
-      ctx.beginPath()
-      ctx.arc(0, 0, p.size * 0.2, 0, Math.PI * 2)
-      ctx.fill()
-
-      ctx.restore()
-    }
-
-    // Seed initial petals spread across screen
     for (let i = 0; i < 22; i++) {
       const p = makePetal()
       p.y = Math.random() * h
@@ -75,14 +70,15 @@ export default function BluePetals() {
     }
 
     let raf: number
+
     function animate() {
-      ctx.clearRect(0, 0, w, h)
+      c.clearRect(0, 0, w, h)
       for (let i = petals.length - 1; i >= 0; i--) {
         const p = petals[i]
         p.y += p.speedY
         p.x += p.speedX + Math.sin(p.y * 0.02) * 0.4
         p.rotation += p.rotSpeed
-        drawFlower(ctx, p)
+        drawFlower(c, p)
         if (p.y > h + 20) petals.splice(i, 1, makePetal())
       }
       raf = requestAnimationFrame(animate)
