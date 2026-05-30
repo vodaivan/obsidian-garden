@@ -16,9 +16,10 @@ lesson:
 apply:
 source:
 url:
-cover: "[["
+cover: "[[Chúng Ta Là Ai Và Chúng Ta Đi Đâu.webp]]"
 ---
 
+![[Chúng Ta Là Ai Và Chúng Ta Đi Đâu.webp]]
 ### Minh vừa tốt nghiệp cấp ba.
 Ngày nhận kết quả thi, bạn bè cậu người thì khoe đậu trường top, người thì đăng ảnh đi ăn mừng cùng gia đình, người thì bắt đầu nói về tương lai như thể cuộc đời vừa mở ra một cánh cửa rất lớn.
 Còn Minh thì thấy trống rỗng.
