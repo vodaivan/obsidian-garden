@@ -33,10 +33,10 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
           </div>
         </header>
         <main>{children}</main>
-        <footer style={{borderTop:'1px solid #e2e8f0',marginTop:'2.5rem',padding:'1rem 1.5rem',textAlign:'center',fontSize:'0.78rem',color:'#94a3b8',lineHeight:'1.6'}}>
-          Compiled by <span style={{color:'#64748b',fontWeight:600}}>Vo Dai Van</span>
+        <footer className="site-footer-info">
+          Compiled by <span className="footer-author">Vo Dai Van</span>
           &nbsp;·&nbsp;
-          <a href="mailto:vodaivan00@gmail.com" style={{color:'#94a3b8',textDecoration:'none'}} onMouseOver={e=>(e.currentTarget.style.color='#0ea5e9')} onMouseOut={e=>(e.currentTarget.style.color='#94a3b8')}>
+          <a href="mailto:vodaivan00@gmail.com" className="footer-email">
             vodaivan00@gmail.com
           </a>
         </footer>
