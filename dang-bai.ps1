@@ -30,7 +30,9 @@ Get-ChildItem -Path $PUBLISH -Filter '*.md' | ForEach-Object {
     foreach ($m in $refs) {
         $imgName = $m.Groups[1].Value.Trim()
         $imgDest = Join-Path $IMAGES $imgName
-        $found = Get-ChildItem -Path $VAULT -Filter $imgName -Recurse -ErrorAction SilentlyContinue | Select-Object -First 1
+        $found = Get-ChildItem -Path $VAULT -Filter $imgName -Recurse -ErrorAction SilentlyContinue |
+            Where-Object { $_.FullName -ne $imgDest } |
+            Select-Object -First 1
         if ($found) {
             Copy-Item $found.FullName $imgDest -Force
             $imagesCopied++
